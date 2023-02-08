@@ -1,7 +1,7 @@
 import { getEateries } from "./eateries/EateryProvider.js"
 import { getParks } from "./parks/ParkProvider.js"
 import { getBizarreries } from "./attractions/AttractionProvider.js"
-import { setParkId, setEateryId, setBizarrerieId } from "./dataAccess.js"
+import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary } from "./dataAccess.js"
 
 
 
@@ -29,21 +29,36 @@ document.addEventListener("change", (event) => {
     if (event.target.id === "bizarreries") {
     const bizarrerieId = document.querySelector("select[name='bizarreries']").value 
     setBizarrerieId(parseInt(bizarrerieId))
+    renderItineraryPreview()
+    }
+})
+
+document.addEventListener("click", clickEvent => {
+    if(clickEvent.target.id === "SavePreview") {
+        const itinerary = getItinerary()
+       
+        sendItinerary(itinerary)
     }
 })
 
 
-
-
 export const renderItineraryPreview = () => {
-    const newGame = document.querySelector(".itineraryPreview")
-    newGame.innerHTML = ItineraryPreview()
+    const preview = document.querySelector(".itineraryPreview")
+    preview.innerHTML = ItineraryPreview()
 }
 
 
 
 export const ItineraryPreview = () => {
-
+    const itinerary = getItinerary()
+    const park = FindPark(itinerary.nationalParkId)
+    const eatery = FindEatery(itinerary.eateryId)
+    const bizarerrie = FindBizarrerie(itinerary.bizarrerieId)
+   return `<h2>Itinerary Preview<h2>
+       <div> ${park.fullName} </div>
+       <div> ${eatery.businessName}  </div> 
+       <div>  ${bizarerrie.name}  </div> 
+       <button class="SavePreview"> Save Itinerary</button>`
 
 }
 
@@ -85,6 +100,7 @@ export const selectEatery = () => {
 `
     return html
 }
+
 
 export const selectBizarrarie = () => {
     const bizarreries = getBizarreries()
