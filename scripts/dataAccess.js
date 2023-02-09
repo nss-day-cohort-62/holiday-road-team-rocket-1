@@ -23,7 +23,7 @@ export const setEateryId = (id) => {
     applicationState.itinerary.eateryId = id
 }
 export const setBizarrerieId = (id) => {
-    applicationState.itinerary.bizarrerieId = id
+    applicationState.itinerary.bizarrerieIds.push(id)
 }
 export const FindPark = (id) => {
     const parks = getParks()
@@ -51,6 +51,18 @@ export const FindBizarrerie = (id) => {
         }
     )
     return foundBizarrerie
+}
+
+export const FindAllBizarreries = (bizarrarieIdArray) => {
+    const bizarreries = getBizarreries()
+
+    bizarreries.map(bizarrerie => {
+        const foundBizarreries = bizarrarieIdArray.filter(bizarrarieId => {
+            bizarrerie.id === bizarrarieId
+        }
+    )
+    return foundBizarreries
+    })
 }
 
 export const sendItinerary = (itinerary) => {

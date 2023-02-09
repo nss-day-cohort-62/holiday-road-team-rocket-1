@@ -1,7 +1,7 @@
 import { getEateries } from "./eateries/EateryProvider.js"
 import { getParks } from "./parks/ParkProvider.js"
 import { getBizarreries } from "./attractions/AttractionProvider.js"
-import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary, getSavedItineraries, resetItinerary } from "./dataAccess.js"
+import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary, getSavedItineraries, resetItinerary, FindAllBizarreries } from "./dataAccess.js"
 import { itinerary } from "./HolidayRoad.js"
 import { popUpText, Weather } from "./weather/WeatherProvider.js"
 import { Directions, Geocoding, Instructions } from "./directions/DirectionProvider.js"
@@ -155,7 +155,7 @@ export const ItineraryPreview = () => {
     const itinerary = getItinerary()
     const park = FindPark(itinerary.nationalParkId)
     const eatery = FindEatery(itinerary.eateryId)
-    const bizarerrie = FindBizarrerie(itinerary.bizarrerieId)
+    const bizarerries = FindAllBizarreries(itinerary.bizarrerieIds)
     let html =`<h2>Itinerary Preview<h2> `
    if (park){
     html += ` <div class = "previewItem"> ${park.fullName} 
@@ -169,11 +169,14 @@ export const ItineraryPreview = () => {
     <div class="eateryDetails"></div>
     </div>`
    }
-   if (bizarerrie) {
-    html +=`<div class = "previewItem">${bizarerrie.name}
+   if (bizarerries) {
+    for(const bizarerrie of bizarerries) {
+        html +=`<div class = "previewItem">${bizarerrie.name}
     <button id="Details_bizarerrie"> Details</button>
     <div class="bizarerrieDetails"></div>
     </div> `
+    }
+    
    }
       if (park && eatery && bizarerrie) {
         html +=  `<button id = "SavePreview"> Save Itinerary</button>`
