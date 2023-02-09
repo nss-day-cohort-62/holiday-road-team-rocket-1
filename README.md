@@ -62,7 +62,7 @@ Add a button to a saved itinerary labeled _Events_. When the user clicks the but
 
 Add a **`UserSearch`** component to your application where the user can type in any search string, and you would find anything that matches in...
 
-1. Your local iternary API
+1. Your local itinerary API
 1. National Park Service API
 1. Bizarreries API
 1. Eateries API

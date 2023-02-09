@@ -17,6 +17,12 @@
       "eateryId": 4,
       "bizarrerieId": 1,
       "id": 3
+    },
+    {
+      "nationalParkId": "7D6098F9-3F75-4775-A56D-CD9C7F9A9488",
+      "eateryId": 7,
+      "bizarrerieId": 4,
+      "id": 4
     }
   ]
 }

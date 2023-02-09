@@ -21,7 +21,9 @@ export const HolidayRoad = () => {
     <div class = "itineraryPreviewBox">
      <h2>Itinerary Preview<h2>
         <div class="itineraryPreview"></div>
+
     </div>
+
     <div class = "savedItinerary">${savedItinerary()}</div>`
     
 }
