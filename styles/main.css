@@ -1,0 +1,48 @@
+#container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: 100%;
+}
+
+.itineraryForm{
+    display: flex;
+    flex-direction: column;
+    background-color:lightslategray;
+    gap: 100px;
+    padding:50px;
+    width: 20%;
+    
+    
+}
+.itineraryPreview {
+    display: flex;
+    flex-direction: column;
+    padding:50px;
+    text-align: center;
+    
+}
+.savedItinerary {
+    display: flex;
+    flex-direction: column;
+    padding:50px;
+    text-align: center;
+   
+
+}
+.itineraryForm select{
+    margin: 10px;
+    width: 150px;
+    text-align: center;
+}
+.previewItem{
+    margin: 25px;
+    
+}
+
+body {
+    height: 725px;
+}
+h1 {
+    text-align: center;
+}
