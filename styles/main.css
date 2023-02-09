@@ -11,15 +11,22 @@
     background-color:lightslategray;
     gap: 100px;
     padding:50px;
-    width: 20%;
+    margin-right: 100px;
+    
     
     
 }
+.itineraryPreviewBox{
+text-align: center;
+}
+
+
 .itineraryPreview {
     display: flex;
     flex-direction: column;
     padding:50px;
     text-align: center;
+   
     
 }
 .savedItinerary {
@@ -28,6 +35,10 @@
     padding:50px;
     text-align: center;
     float: right;
+    width: 20%;
+    position: absolute;
+    right:0px;
+    margin-left: 0px;
 }
 .itineraryForm select{
     margin: 10px;
