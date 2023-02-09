@@ -4,6 +4,7 @@ import { getBizarreries } from "./attractions/AttractionProvider.js"
 import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary, getSavedItineraries, resetItinerary } from "./dataAccess.js"
 import { itinerary } from "./HolidayRoad.js"
 import { popUpText, Weather } from "./weather/WeatherProvider.js"
+import { Directions, Geocoding, Instructions } from "./directions/DirectionProvider.js"
 
 
 
@@ -73,6 +74,43 @@ document.addEventListener("click", clickEvent => {
 
     }
 })
+document.addEventListener("click", clickEvent => {
+    const itemClicked = clickEvent.target.id
+    if(itemClicked.startsWith("Directions")) {
+        const [,userPrimaryKey] = itemClicked.split('--')
+        let itineraries = getSavedItineraries()
+        const foundItinerary = itineraries.find((itinerary) => {
+            return itinerary.id === parseInt(userPrimaryKey)
+        })
+
+        const park = FindPark(foundItinerary.nationalParkId)
+        const eatery = FindEatery(foundItinerary.eateryId)
+        const bizarerrie = FindBizarrerie(foundItinerary.bizarrerieId)
+        //const bizarerrieCoordinateArray = 
+        Geocoding(bizarerrie.city).then(
+            (bizarerrieCoordinateArray) => {
+                Geocoding(eatery.city).then(
+                    (eateryCoordinateArray) => {
+                        Directions(park.latitude, park.longitude, eateryCoordinateArray.hits[0].point.lat, eateryCoordinateArray.hits[0].point.lng, bizarerrieCoordinateArray.hits[0].point.lat, bizarerrieCoordinateArray.hits[0].point.lng).then(
+                            (instructions) => {
+                                renderDirections(Instructions(instructions))
+                            }
+                        )
+                    }
+                )
+            }
+        )
+        // const eateryCoordinateArray = Geocoding(eatery.city)
+
+        // const instructions = Directions(park.latitude, park.longitude, eateryCoordinateArray[0].point.lat, eateryCoordinateArray[0].point.lon, bizarerrieCoordinateArray[0].point.lat, bizarerrieCoordinateArray[0].point.lon) 
+        //renderDirections(Instructions(instructions))
+
+    }
+})
+export const renderDirections = (instructionsHTML) => {
+    const directionHTML = document.querySelector(".directions")
+    directionHTML.innerHTML = instructionsHTML
+}
 export const renderItineraryPreview = () => {
     const preview = document.querySelector(".itineraryPreview")
     preview.innerHTML = ItineraryPreview()
@@ -99,7 +137,9 @@ export const savedItinerary = () => {
              <p>${park.fullName}</p>
              <p> ${eatery.businessName}</p>
              <p> ${bizarerrie.name}</p>
-             </li>`
+             </li>
+             <button id="Directions--${itinerary.id}">Directions</button>
+             `
     })
 
 

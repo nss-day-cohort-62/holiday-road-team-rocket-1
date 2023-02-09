@@ -1,28 +1,16 @@
 {
   "savedItineraries": [
     {
-      "nationalParkId": "E4C7784E-66A0-4D44-87D0-3E072F5FEF43",
-      "eateryId": 2,
-      "bizarrerieId": 3,
+      "nationalParkId": "77E0D7F0-1942-494A-ACE2-9004D2BDC59E",
+      "eateryId": 4,
+      "bizarrerieId": 11,
       "id": 1
     },
     {
-      "nationalParkId": "6DA17C86-088E-4B4D-B862-7C1BD5CF236B",
-      "eateryId": 22,
-      "bizarrerieId": 9,
+      "nationalParkId": "1A47416F-DAA3-4137-9F30-14AF86B4E547",
+      "eateryId": 6,
+      "bizarrerieId": 10,
       "id": 2
-    },
-    {
-      "nationalParkId": "C7C40543-5879-48FC-8E55-C26F3E0B4CCD",
-      "eateryId": 4,
-      "bizarrerieId": 1,
-      "id": 3
-    },
-    {
-      "nationalParkId": "7D6098F9-3F75-4775-A56D-CD9C7F9A9488",
-      "eateryId": 7,
-      "bizarrerieId": 4,
-      "id": 4
     }
   ]
 }
