@@ -5,7 +5,9 @@ import { getParks } from "./parks/ParkProvider.js"
 const API = "http://localhost:8088"
 
 export const applicationState = {
- itinerary: {},
+ itinerary: {
+    bizarrerieIds: []
+ },
 savedItineraries: []
 }
 
@@ -24,6 +26,7 @@ export const setEateryId = (id) => {
 }
 export const setBizarrerieId = (id) => {
     applicationState.itinerary.bizarrerieIds.push(id)
+    console.log(applicationState.itinerary.bizarrerieIds)
 }
 export const FindPark = (id) => {
     const parks = getParks()
@@ -55,12 +58,12 @@ export const FindBizarrerie = (id) => {
 
 export const FindAllBizarreries = (bizarrarieIdArray) => {
     const bizarreries = getBizarreries()
-
+    const foundBizarreries = []
     bizarreries.map(bizarrerie => {
-        const foundBizarreries = bizarrarieIdArray.filter(bizarrarieId => {
+        foundBizarreries.push(bizarrarieIdArray.filter(bizarrarieId => {
             bizarrerie.id === bizarrarieId
         }
-    )
+    ))
     return foundBizarreries
     })
 }
