@@ -1,7 +1,7 @@
 import { getEateries } from "./eateries/EateryProvider.js"
 import { getParks } from "./parks/ParkProvider.js"
 import { getBizarreries } from "./attractions/AttractionProvider.js"
-import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary, getSavedItineraries, resetItinerary, FindAllBizarreries } from "./dataAccess.js"
+import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary, getSavedItineraries, resetItinerary, FindAllBizarreries} from "./dataAccess.js"
 import { itinerary } from "./HolidayRoad.js"
 import { popUpText, Weather } from "./weather/WeatherProvider.js"
 import { Directions, Geocoding, Instructions } from "./directions/DirectionProvider.js"
@@ -37,6 +37,7 @@ document.addEventListener("change", (event) => {
     if (event.target.id === "bizarreries") {
     const bizarrerieId = document.querySelector("select[name='bizarreries']").value 
     setBizarrerieId(parseInt(bizarrerieId))
+    
     renderItineraryPreview()
     }
 })
@@ -178,7 +179,7 @@ export const ItineraryPreview = () => {
     }
     
    }
-      if (park && eatery && bizarerrie) {
+      if (park && eatery && bizarerries) {
         html +=  `<button id = "SavePreview"> Save Itinerary</button>`
       }
        
