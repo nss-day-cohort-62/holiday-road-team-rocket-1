@@ -116,7 +116,7 @@ export const ItineraryPreview = () => {
     const park = FindPark(itinerary.nationalParkId)
     const eatery = FindEatery(itinerary.eateryId)
     const bizarerrie = FindBizarrerie(itinerary.bizarrerieId)
-    let html =``
+    let html =`<h2>Itinerary Preview<h2> `
    if (park){
     html += ` <div class = "previewItem"> ${park.fullName} 
     <button id="Details_park"> Details</button>
