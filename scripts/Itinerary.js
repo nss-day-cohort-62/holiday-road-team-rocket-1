@@ -1,7 +1,8 @@
 import { getEateries } from "./eateries/EateryProvider.js"
 import { getParks } from "./parks/ParkProvider.js"
 import { getBizarreries } from "./attractions/AttractionProvider.js"
-import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary } from "./dataAccess.js"
+import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary, getSavedItineraries, resetItinerary } from "./dataAccess.js"
+import { itinerary } from "./HolidayRoad.js"
 
 
 
@@ -13,7 +14,7 @@ document.addEventListener("change", (event) => {
         eateryHTML.innerHTML = selectEatery()
         const bizarrerieHTML = document.querySelector(".selectBizarrarie")
         bizarrerieHTML.innerHTML = selectBizarrarie()
-      
+      renderItineraryPreview()
         
     }
 })
@@ -22,7 +23,7 @@ document.addEventListener("change", (event) => {
     if (event.target.id === "eateries") {
     const eateryId = document.querySelector("select[name='eateries']").value 
         setEateryId(parseInt(eateryId))
-        
+        renderItineraryPreview()
     }
 })
 document.addEventListener("change", (event) => {
@@ -35,9 +36,11 @@ document.addEventListener("change", (event) => {
 
 document.addEventListener("click", clickEvent => {
     if(clickEvent.target.id === "SavePreview") {
-        const itinerary = getItinerary()
+        let itinerary = getItinerary()
        
         sendItinerary(itinerary)
+        resetItinerary()
+
     }
 })
 
@@ -47,6 +50,37 @@ export const renderItineraryPreview = () => {
     preview.innerHTML = ItineraryPreview()
 }
 
+export const renderSavedItinerary = () => {
+    const preview = document.querySelector(".savedItinerary")
+    preview.innerHTML = savedItinerary()
+}
+
+export const savedItinerary = () => {
+    const itineraries = getSavedItineraries()
+    
+    
+    let html = `<ul>`
+    
+    itineraries.map((itinerary) => {
+        
+    const park = FindPark(itinerary.nationalParkId)
+    const eatery = FindEatery(itinerary.eateryId)
+    const bizarerrie = FindBizarrerie(itinerary.bizarrerieId)
+        html += `<li>
+            <h4>Itinerary ${itinerary.id}</h4>
+             <p>${park.fullName}</p>
+             <p> ${eatery.businessName}</p>
+             <p> ${bizarerrie.name}</p>
+             </li>`
+    })
+
+
+
+    html += `</ul>`
+    return html
+}
+
+
 
 
 export const ItineraryPreview = () => {
@@ -54,20 +88,32 @@ export const ItineraryPreview = () => {
     const park = FindPark(itinerary.nationalParkId)
     const eatery = FindEatery(itinerary.eateryId)
     const bizarerrie = FindBizarrerie(itinerary.bizarrerieId)
-   return `<h2>Itinerary Preview<h2>
-       <div> ${park.fullName} </div>
-       <div> ${eatery.businessName}  </div> 
-       <div>  ${bizarerrie.name}  </div> 
-       <button class="SavePreview"> Save Itinerary</button>`
+    let html =``
+   if (park){
+    html += ` <div class = "previewItem"> ${park.fullName} </div>`
+   }
+    if (eatery ) {
+    html += `<div class = "previewItem"> ${eatery.businessName}</div> `
+   }
+   if (bizarerrie) {
+html +=`<div class = "previewItem">${bizarerrie.name}</div> `
+   }
+      if (park && eatery && bizarerrie) {
+        html +=  `<button id = "SavePreview"> Save Itinerary</button>`
+      }
+       
+       return html
 
 }
 
 
 
 export const itineraryForm = () => {
-   return ` <div class="selectPark"> ${selectPark()}</div>
+   return ` <div class = "itineraryForm">
+   <div class="selectPark"> ${selectPark()}</div>
     <div class = "selectEatery"></div>
-    <div class = "selectBizarrarie"></div>`
+    <div class = "selectBizarrarie"></div>
+    </div>`
 }
 
 

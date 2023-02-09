@@ -5,11 +5,7 @@ import { getParks } from "./parks/ParkProvider.js"
 const API = "http://localhost:8088"
 
 export const applicationState = {
- itinerary: {
-    nationalParkId: 0,
-    bizarrerieId: 0,
-    eateryId: 0
-},
+ itinerary: {},
 savedItineraries: []
 }
 
@@ -17,7 +13,9 @@ export const getItinerary = () => {
     return applicationState.itinerary
 }
 
-
+export const resetItinerary = () => {
+    applicationState.itinerary = {}
+}
 export const setParkId = (id) => {
     applicationState.itinerary.nationalParkId = id
 }
