@@ -97,7 +97,7 @@ export const fetchItineraries = () => {
         .then(response => response.json())
         .then((itinerariesFetched) => {
             applicationState.savedItineraries = itinerariesFetched
-            console.log(applicationState.savedItineraries)
+           
         }
     )
 }
