@@ -1,58 +1,77 @@
 import { getEateries } from "./eateries/EateryProvider.js"
 import { Events, getParks } from "./parks/ParkProvider.js"
 import { getBizarreries } from "./attractions/AttractionProvider.js"
-import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary, getSavedItineraries, resetItinerary, FindAllBizarreries, FindAllEateries} from "./dataAccess.js"
+import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary, getSavedItineraries, resetItinerary, FindAllBizarreries, FindAllEateries } from "./dataAccess.js"
 import { itinerary } from "./HolidayRoad.js"
 import { popUpText, Weather } from "./weather/WeatherProvider.js"
 import { Directions, Geocoding, Instructions, LocationHTTPS, LocationsMap } from "./directions/DirectionProvider.js"
+import { searchAll } from "./searchBar.js"
+
+document.addEventListener("click", event => {
+    if (event.target.id === "searchButton") {
+        const inquiry = document.querySelector("input[name='Searchbar']").value
+       const searchResults = searchAll(inquiry)
+
+
+
+    
+    }})
+
+
+
+
+
+
+
+
 
 
 
 document.addEventListener("change", (event) => {
     if (event.target.id === "parks") {
-    const parkId = document.querySelector("select[name='parks']").value 
+        const parkId = document.querySelector("select[name='parks']").value
         setParkId(parkId)
         const eateryHTML = document.querySelector(".selectEatery")
         eateryHTML.innerHTML = selectEatery()
         const bizarrerieHTML = document.querySelector(".selectBizarrarie")
         bizarrerieHTML.innerHTML = selectBizarrarie()
-      renderItineraryPreview()
-      const park = FindPark(parkId)
-      Weather(park.latitude, park.longitude).then(
-        (data) => {
-            popUpText(data)
-        }
-      )  
+        renderItineraryPreview()
+        const park = FindPark(parkId)
+        Weather(park.latitude, park.longitude).then(
+            (data) => {
+                popUpText(data)
+            }
+        )
     }
 })
 
 document.addEventListener("change", (event) => {
     if (event.target.id === "eateries") {
-    const eateryId = document.querySelector("select[name='eateries']").value 
+        const eateryId = document.querySelector("select[name='eateries']").value
         setEateryId(parseInt(eateryId))
         renderItineraryPreview()
     }
 })
 document.addEventListener("change", (event) => {
     if (event.target.id === "bizarreries") {
-    const bizarrerieId = document.querySelector("select[name='bizarreries']").value 
-    setBizarrerieId(parseInt(bizarrerieId))
-    
-    renderItineraryPreview()
+        const bizarrerieId = document.querySelector("select[name='bizarreries']").value
+        setBizarrerieId(parseInt(bizarrerieId))
+
+        renderItineraryPreview()
     }
 })
 
 document.addEventListener("click", clickEvent => {
-    if(clickEvent.target.id === "SavePreview") {
+    if (clickEvent.target.id === "SavePreview") {
         let itinerary = getItinerary()
-       
+
         sendItinerary(itinerary)
         resetItinerary()
 
     }
 })
 document.addEventListener("click", clickEvent => {
-    if(clickEvent.target.id === "Details_park") {
+    if (clickEvent.target.id === "Details_park") {
         const itinerary = getItinerary()
         const park = FindPark(itinerary.nationalParkId)
         const parkHTML = `About ${park.fullName}--${park.description}\n \n Located at ${park.addresses[0].line1} ${park.addresses[0].city}, ${park.addresses[0].stateCode}\n \n How to get there: ${park.directionsInfo}`
@@ -62,63 +81,70 @@ document.addEventListener("click", clickEvent => {
 })
 document.addEventListener("click", clickEvent => {
     const itemClicked = clickEvent.target.id
-    if(itemClicked.startsWith("Details_eatery")) {
-        const [,userPrimaryKey] = itemClicked.split('--')    
+    if (itemClicked.startsWith("Details_eatery")) {
+        const [, userPrimaryKey] = itemClicked.split('--')
         const eatery = FindEatery(parseInt(userPrimaryKey))
         window.alert(` About ${eatery.businessName}--${eatery.description} \n \n Located in ${eatery.city}, ${eatery.state}`)
     }
 })
 document.addEventListener("click", clickEvent => {
     const itemClicked = clickEvent.target.id
-    if(itemClicked.startsWith("Details_bizarerrie")) {
-        const [,userPrimaryKey] = itemClicked.split('--')
-       const bizararrie = FindBizarrerie(parseInt(userPrimaryKey))
-       window.alert(`About the ${bizararrie.name}--${bizararrie.description} \n \n Located in ${bizararrie.city}, ${bizararrie.state}`)
+    if (itemClicked.startsWith("Details_bizarerrie")) {
+        const [, userPrimaryKey] = itemClicked.split('--')
+        const bizararrie = FindBizarrerie(parseInt(userPrimaryKey))
+        window.alert(`About the ${bizararrie.name}--${bizararrie.description} \n \n Located in ${bizararrie.city}, ${bizararrie.state}`)
 
     }
 })
 
-// document.addEventListener("click", clickEvent => {
-//     const itemClicked = clickEvent.target.id
-//     if(itemClicked.startsWith("Events")) {
-//         const [,userPrimaryKey] = itemClicked.split('--')    
-//         const foundPark = FindPark(userPrimaryKey)
-//        //const parkEventsArray = []
-//         Events(foundPark.parkCode).then(
-//             (parkEventsArray) => {
-//             //    const parkEventsDataArray = parkEvents.data
-//             // for(const parkEvent of parkEventsDataArray) {
-//             // if(parkEvent.sitecode === foundPark.parkCode){
-//             //     parkEventsArray.push(parkEvent)
-//             //     console.log(parkEventsArray)
-//             // }
-//             console.log(parkEventsArray)
-          
-//                 // window.alert(`Event 1:
-//                 // ${parkEventsArray.data[0].title}
-//                 // ${parkEventsArray.data[0].dateStart}
-//                 // ${parkEventsArray.data[0].times[0].timestart}
-//                 // ${parkEventsArray.data[0].times[0].timeend}
-//                 // ${parkEventsArray.data[0].description}
-//                 // ${parkEventsArray.data[0].feeinfo}
-                
-//                 // Event 2:
-//                 // ${parkEventsArray.data[1].title}
-//                 // ${parkEventsArray.data[1].dateStart}
-//                 // ${parkEventsArray.data[1].times[0].timestart}
-//                 // ${parkEventsArray.data[1].times[0].timeend}
-//                 // ${parkEventsArray.data[1].description}
-//                 // ${parkEventsArray.data[1].feeinfo}`)
-//         }
-//         )  
-//     }
-// })
+document.addEventListener("click", clickEvent => {
+    const itemClicked = clickEvent.target.id
+    if (itemClicked.startsWith("Events")) {
+        const [, userPrimaryKey] = itemClicked.split('--')
+        const foundPark = FindPark(userPrimaryKey)
+        //const parkEventsArray = []
+        Events(foundPark.parkCode).then(
+            (parkEventsArray) => {
+                if (parkEventsArray.data[0]) {
+
+
+                    window.alert(`Event 1:
+                 ${parkEventsArray.data[0].title}
+                 ${parkEventsArray.data[0].dateStart}
+                 ${parkEventsArray.data[0].times[0].timestart}
+                 ${parkEventsArray.data[0].times[0].timeend}
+                 ${parkEventsArray.data[0].description}
+                 ${parkEventsArray.data[0].feeinfo}
+                `)
+                }
+
+                if (parkEventsArray.data[1]) {
+
+                    window.alert(`Event 2:
+                ${parkEventsArray.data[1].title}
+                ${parkEventsArray.data[1].dateStart}
+                ${parkEventsArray.data[1].times[0].timestart}
+                ${parkEventsArray.data[1].times[0].timeend}
+                ${parkEventsArray.data[1].description}
+                ${parkEventsArray.data[1].feeinfo}`
+                    )
+
+                }
+
+                else{
+                    window.alert(`There are no events scheduled for this park.`)
+                }
+
+            }
+        )
+    }
+})
 
 
 document.addEventListener("click", clickEvent => {
     const itemClicked = clickEvent.target.id
-    if(itemClicked.startsWith("Directions")) {
-        const [,userPrimaryKey] = itemClicked.split('--')
+    if (itemClicked.startsWith("Directions")) {
+        const [, userPrimaryKey] = itemClicked.split('--')
         let itineraries = getSavedItineraries()
         const foundItinerary = itineraries.find((itinerary) => {
             return itinerary.id === parseInt(userPrimaryKey)
@@ -127,7 +153,7 @@ document.addEventListener("click", clickEvent => {
         const park = FindPark(foundItinerary.nationalParkId)
         const eateries = FindAllEateries(foundItinerary)
         const bizarerries = FindAllBizarreries(foundItinerary)
-        
+
         LocationsMap(eateries, bizarerries).then(
             (httpString) => {
                 Directions(park.latitude, park.longitude, httpString).then(
@@ -136,7 +162,7 @@ document.addEventListener("click", clickEvent => {
                     }
                 )
             }
-        )                     
+        )
     }
 })
 export const renderDirections = (instructionsHTML) => {
@@ -155,14 +181,14 @@ export const renderSavedItinerary = () => {
 
 export const savedItinerary = () => {
     const itineraries = getSavedItineraries()
-    
+
     let html = `<ul>`
-    
+
     itineraries.map((itinerary) => {
-        
-    const park = FindPark(itinerary.nationalParkId)
-    const eateries = FindAllEateries(itinerary)
-    const bizarerries = FindAllBizarreries(itinerary)
+
+        const park = FindPark(itinerary.nationalParkId)
+        const eateries = FindAllEateries(itinerary)
+        const bizarerries = FindAllBizarreries(itinerary)
 
         html += `<li class="savedItineraryList">
             <h2>Itinerary ${itinerary.id}</h2>
@@ -191,46 +217,50 @@ export const ItineraryPreview = () => {
     const park = FindPark(itinerary.nationalParkId)
     const eateries = FindAllEateries(itinerary)
     const bizarerries = FindAllBizarreries(itinerary)
-    let html =`<h2>Itinerary Preview<h2> `
-   if (park){
-    html += ` <div class = "previewItem"> ${park.fullName} 
+    let html = `<h2>Itinerary Preview<h2> `
+    if (park) {
+        html += ` <div class = "previewItem"> ${park.fullName} 
     <button id="Details_park"> Details</button>
     <div class="parkDetails"></div>
     </div>`
-   }
-    if (eateries) {
+    }
+    if (eateries[0]) {
         for (const eatery of eateries) {
             html += `<div class = "previewItem"> ${eatery.businessName}
             <button id="Details_eatery--${eatery.id}"> Details</button>
             <div class="eateryDetails"></div>
             </div>`
         }
-   }
-   if (bizarerries) {
-    for(const bizarerrie of bizarerries) {
-        html +=`<div class = "previewItem">${bizarerrie.name}
+    }
+    if (bizarerries[0]) {
+        for (const bizarerrie of bizarerries) {
+            html += `<div class = "previewItem">${bizarerrie.name}
     <button id="Details_bizarerrie--${bizarerrie.id}"> Details</button>
     <div class="bizarerrieDetails"></div>
     </div> `
+        }
+
     }
-    
-   }
-      if (park && eateries && bizarerries) {
-        html +=  `<button id = "SavePreview"> Save Itinerary</button>`
-      }
-       
-       return html
+    if (park && eateries[0] && bizarerries[0]) {
+        html += `<button id = "SavePreview"> Save Itinerary</button>`
+    }
+
+    return html
 
 }
 
 
 
 export const itineraryForm = () => {
-   return ` <div class = "itineraryForm">
+    return ` <div class = "itineraryForm">
    <img id="headerImage" src = "https://www.shareicon.net/data/512x512/2015/12/06/683420_location_512x512.png" width ="100px" height="100px">
    <div class="selectPark"> ${selectPark()}</div>
     <div class = "selectEatery"></div>
     <div class = "selectBizarrarie"></div>
+    <div class="searchBox">
+            <input type="text" placeholder="Type here to search" name="Searchbar" class="input"/>
+            <button id="searchButton" class = "searchButton">Search</button>
+        </div>
     </div>`
 }
 
@@ -244,8 +274,8 @@ export const selectPark = () => {
         <select class="teams" name = "parks" id="parks">
             <option value="0">Choose a park</option>
             ${parks.map(park => {
-                return `<option value="${park.id}" >${park.fullName}</option>`
-            }).join("")}
+        return `<option value="${park.id}" >${park.fullName}</option>`
+    }).join("")}
         </select>
 `
     return html
@@ -258,8 +288,8 @@ export const selectEatery = () => {
         <select class="teams" name = "eateries" id="eateries">
             <option value="0">Choose a eatery</option>
             ${eateries.map(eatery => {
-                return `<option value="${eatery.id}" >${eatery.businessName}</option>`
-            }).join("")}
+        return `<option value="${eatery.id}" >${eatery.businessName}</option>`
+    }).join("")}
         </select>
 `
     return html
@@ -273,8 +303,8 @@ export const selectBizarrarie = () => {
         <select class="teams" name = "bizarreries" id="bizarreries">
             <option value="0">Choose a bizararrie</option>
             ${bizarreries.map(bizararrie => {
-                return `<option value="${bizararrie.id}" >${bizararrie.name}</option>`
-            }).join("")}
+        return `<option value="${bizararrie.id}" >${bizararrie.name}</option>`
+    }).join("")}
         </select>
 `
     return html
