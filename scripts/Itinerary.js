@@ -133,13 +133,14 @@ export const savedItinerary = () => {
     const park = FindPark(itinerary.nationalParkId)
     const eatery = FindEatery(itinerary.eateryId)
     const bizarerrie = FindBizarrerie(itinerary.bizarrerieId)
-        html += `<li>
-            <h4>Itinerary ${itinerary.id}</h4>
+        html += `<li class="savedItineraryList">
+            <h2>Itinerary ${itinerary.id}</h2>
              <p>${park.fullName}</p>
              <p> ${eatery.businessName}</p>
              <p> ${bizarerrie.name}</p>
+             
+             <button class="directionsButton" id="Directions--${itinerary.id}">Take Me There!</button>
              </li>
-             <button id="Directions--${itinerary.id}">Directions</button>
              `
     })
 
@@ -151,12 +152,12 @@ export const savedItinerary = () => {
 
 
 
-
+//update the details click event
 export const ItineraryPreview = () => {
     const itinerary = getItinerary()
     const park = FindPark(itinerary.nationalParkId)
     const eatery = FindEatery(itinerary.eateryId)
-    const bizarerries = FindAllBizarreries(itinerary.bizarrerieIds)
+    const bizarerries = FindAllBizarreries(itinerary)
     let html =`<h2>Itinerary Preview<h2> `
    if (park){
     html += ` <div class = "previewItem"> ${park.fullName} 
@@ -173,7 +174,7 @@ export const ItineraryPreview = () => {
    if (bizarerries) {
     for(const bizarerrie of bizarerries) {
         html +=`<div class = "previewItem">${bizarerrie.name}
-    <button id="Details_bizarerrie"> Details</button>
+    <button id="Details_bizarerrie--${bizarerrie.id}"> Details</button>
     <div class="bizarerrieDetails"></div>
     </div> `
     }
@@ -191,6 +192,7 @@ export const ItineraryPreview = () => {
 
 export const itineraryForm = () => {
    return ` <div class = "itineraryForm">
+   <img id="headerImage" src = "https://www.shareicon.net/data/512x512/2015/12/06/683420_location_512x512.png" width ="100px" height="100px">
    <div class="selectPark"> ${selectPark()}</div>
     <div class = "selectEatery"></div>
     <div class = "selectBizarrarie"></div>
