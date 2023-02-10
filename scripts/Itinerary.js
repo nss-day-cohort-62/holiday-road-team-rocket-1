@@ -78,30 +78,42 @@ document.addEventListener("click", clickEvent => {
     }
 })
 
-document.addEventListener("click", clickEvent => {
-    const itemClicked = clickEvent.target.id
-    if(itemClicked.startsWith("Events")) {
-        const [,userPrimaryKey] = itemClicked.split('--')    
-        const foundPark = FindPark(userPrimaryKey)
-        const parkEvents = Events(foundPark.parkCode)
-        
-        window.alert(`Event 1:
-        ${parkEvents.data[0].title}
-        ${parkEvents.data[0].dateStart}
-        ${parkEvents.data[0].times[0].timestart}
-        ${parkEvents.data[0].times[0].timeend}
-        ${parkEvents.data[0].description}
-        ${parkEvents.data[0].feeinfo}
-        
-        Event 2:
-        ${parkEvents.data[1].title}
-        ${parkEvents.data[1].dateStart}
-        ${parkEvents.data[1].times[0].timestart}
-        ${parkEvents.data[1].times[0].timeend}
-        ${parkEvents.data[1].description}
-        ${parkEvents.data[1].feeinfo}`)
-    }
-})
+// document.addEventListener("click", clickEvent => {
+//     const itemClicked = clickEvent.target.id
+//     if(itemClicked.startsWith("Events")) {
+//         const [,userPrimaryKey] = itemClicked.split('--')    
+//         const foundPark = FindPark(userPrimaryKey)
+//        //const parkEventsArray = []
+//         Events(foundPark.parkCode).then(
+//             (parkEventsArray) => {
+//             //    const parkEventsDataArray = parkEvents.data
+//             // for(const parkEvent of parkEventsDataArray) {
+//             // if(parkEvent.sitecode === foundPark.parkCode){
+//             //     parkEventsArray.push(parkEvent)
+//             //     console.log(parkEventsArray)
+//             // }
+//             console.log(parkEventsArray)
+          
+//                 // window.alert(`Event 1:
+//                 // ${parkEventsArray.data[0].title}
+//                 // ${parkEventsArray.data[0].dateStart}
+//                 // ${parkEventsArray.data[0].times[0].timestart}
+//                 // ${parkEventsArray.data[0].times[0].timeend}
+//                 // ${parkEventsArray.data[0].description}
+//                 // ${parkEventsArray.data[0].feeinfo}
+                
+//                 // Event 2:
+//                 // ${parkEventsArray.data[1].title}
+//                 // ${parkEventsArray.data[1].dateStart}
+//                 // ${parkEventsArray.data[1].times[0].timestart}
+//                 // ${parkEventsArray.data[1].times[0].timeend}
+//                 // ${parkEventsArray.data[1].description}
+//                 // ${parkEventsArray.data[1].feeinfo}`)
+//         }
+//         )  
+//     }
+// })
+
 
 document.addEventListener("click", clickEvent => {
     const itemClicked = clickEvent.target.id
@@ -118,7 +130,6 @@ document.addEventListener("click", clickEvent => {
         
         LocationsMap(eateries, bizarerries).then(
             (httpString) => {
-                console.log(httpString)
                 Directions(park.latitude, park.longitude, httpString).then(
                     (instructions) => {
                         renderDirections(Instructions(instructions))
