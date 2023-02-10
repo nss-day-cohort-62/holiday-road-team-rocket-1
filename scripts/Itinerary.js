@@ -1,10 +1,10 @@
 import { getEateries } from "./eateries/EateryProvider.js"
-import { getParks } from "./parks/ParkProvider.js"
+import { Events, getParks } from "./parks/ParkProvider.js"
 import { getBizarreries } from "./attractions/AttractionProvider.js"
-import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary, getSavedItineraries, resetItinerary, FindAllBizarreries} from "./dataAccess.js"
+import { setParkId, setEateryId, setBizarrerieId, getItinerary, FindPark, FindEatery, FindBizarrerie, sendItinerary, getSavedItineraries, resetItinerary, FindAllBizarreries, FindAllEateries} from "./dataAccess.js"
 import { itinerary } from "./HolidayRoad.js"
 import { popUpText, Weather } from "./weather/WeatherProvider.js"
-import { Directions, Geocoding, Instructions } from "./directions/DirectionProvider.js"
+import { Directions, Geocoding, Instructions, LocationHTTPS, LocationsMap } from "./directions/DirectionProvider.js"
 
 
 
@@ -61,20 +61,48 @@ document.addEventListener("click", clickEvent => {
     }
 })
 document.addEventListener("click", clickEvent => {
-    if(clickEvent.target.id === "Details_eatery") {
-        let itinerary = getItinerary()
-       const eatery = FindEatery(itinerary.eateryId)
-       window.alert(` About ${eatery.businessName}--${eatery.description} \n \n Located in ${eatery.city}, ${eatery.state}`)
+    const itemClicked = clickEvent.target.id
+    if(itemClicked.startsWith("Details_eatery")) {
+        const [,userPrimaryKey] = itemClicked.split('--')    
+        const eatery = FindEatery(parseInt(userPrimaryKey))
+        window.alert(` About ${eatery.businessName}--${eatery.description} \n \n Located in ${eatery.city}, ${eatery.state}`)
     }
 })
 document.addEventListener("click", clickEvent => {
-    if(clickEvent.target.id === "Details_bizarerrie") {
-        let itinerary = getItinerary()
-       const bizararrie = FindBizarrerie(itinerary.bizarrerieId)
+    const itemClicked = clickEvent.target.id
+    if(itemClicked.startsWith("Details_bizarerrie")) {
+        const [,userPrimaryKey] = itemClicked.split('--')
+       const bizararrie = FindBizarrerie(parseInt(userPrimaryKey))
        window.alert(`About the ${bizararrie.name}--${bizararrie.description} \n \n Located in ${bizararrie.city}, ${bizararrie.state}`)
 
     }
 })
+
+document.addEventListener("click", clickEvent => {
+    const itemClicked = clickEvent.target.id
+    if(itemClicked.startsWith("Events")) {
+        const [,userPrimaryKey] = itemClicked.split('--')    
+        const foundPark = FindPark(userPrimaryKey)
+        const parkEvents = Events(foundPark.parkCode)
+        
+        window.alert(`Event 1:
+        ${parkEvents.data[0].title}
+        ${parkEvents.data[0].dateStart}
+        ${parkEvents.data[0].times[0].timestart}
+        ${parkEvents.data[0].times[0].timeend}
+        ${parkEvents.data[0].description}
+        ${parkEvents.data[0].feeinfo}
+        
+        Event 2:
+        ${parkEvents.data[1].title}
+        ${parkEvents.data[1].dateStart}
+        ${parkEvents.data[1].times[0].timestart}
+        ${parkEvents.data[1].times[0].timeend}
+        ${parkEvents.data[1].description}
+        ${parkEvents.data[1].feeinfo}`)
+    }
+})
+
 document.addEventListener("click", clickEvent => {
     const itemClicked = clickEvent.target.id
     if(itemClicked.startsWith("Directions")) {
@@ -85,27 +113,19 @@ document.addEventListener("click", clickEvent => {
         })
 
         const park = FindPark(foundItinerary.nationalParkId)
-        const eatery = FindEatery(foundItinerary.eateryId)
-        const bizarerrie = FindBizarrerie(foundItinerary.bizarrerieId)
-        //const bizarerrieCoordinateArray = 
-        Geocoding(bizarerrie.city).then(
-            (bizarerrieCoordinateArray) => {
-                Geocoding(eatery.city).then(
-                    (eateryCoordinateArray) => {
-                        Directions(park.latitude, park.longitude, eateryCoordinateArray.hits[0].point.lat, eateryCoordinateArray.hits[0].point.lng, bizarerrieCoordinateArray.hits[0].point.lat, bizarerrieCoordinateArray.hits[0].point.lng).then(
-                            (instructions) => {
-                                renderDirections(Instructions(instructions))
-                            }
-                        )
+        const eateries = FindAllEateries(foundItinerary)
+        const bizarerries = FindAllBizarreries(foundItinerary)
+        
+        LocationsMap(eateries, bizarerries).then(
+            (httpString) => {
+                console.log(httpString)
+                Directions(park.latitude, park.longitude, httpString).then(
+                    (instructions) => {
+                        renderDirections(Instructions(instructions))
                     }
                 )
             }
-        )
-        // const eateryCoordinateArray = Geocoding(eatery.city)
-
-        // const instructions = Directions(park.latitude, park.longitude, eateryCoordinateArray[0].point.lat, eateryCoordinateArray[0].point.lon, bizarerrieCoordinateArray[0].point.lat, bizarerrieCoordinateArray[0].point.lon) 
-        //renderDirections(Instructions(instructions))
-
+        )                     
     }
 })
 export const renderDirections = (instructionsHTML) => {
@@ -125,27 +145,29 @@ export const renderSavedItinerary = () => {
 export const savedItinerary = () => {
     const itineraries = getSavedItineraries()
     
-    
     let html = `<ul>`
     
     itineraries.map((itinerary) => {
         
     const park = FindPark(itinerary.nationalParkId)
-    const eatery = FindEatery(itinerary.eateryId)
-    const bizarerrie = FindBizarrerie(itinerary.bizarrerieId)
+    const eateries = FindAllEateries(itinerary)
+    const bizarerries = FindAllBizarreries(itinerary)
+
         html += `<li class="savedItineraryList">
             <h2>Itinerary ${itinerary.id}</h2>
              <p>${park.fullName}</p>
-             <p> ${eatery.businessName}</p>
-             <p> ${bizarerrie.name}</p>
-             
-             <button class="directionsButton" id="Directions--${itinerary.id}">Take Me There!</button>
-             </li>
-             `
+             <button class="eventsButton" id="Events--${itinerary.nationalParkId}">Park Events</button>`
+        for (const eatery of eateries) {
+            html += `<p>${eatery.businessName}</p>`
+        }
+        for (const bizarerrie of bizarerries) {
+            html += `<p> ${bizarerrie.name}</p>`
+        }
+        html += `<button class="directionsButton" id="Directions--${itinerary.id}">Take Me There!</button>
+        
+        </li>
+        `
     })
-
-
-
     html += `</ul>`
     return html
 }
@@ -156,7 +178,7 @@ export const savedItinerary = () => {
 export const ItineraryPreview = () => {
     const itinerary = getItinerary()
     const park = FindPark(itinerary.nationalParkId)
-    const eatery = FindEatery(itinerary.eateryId)
+    const eateries = FindAllEateries(itinerary)
     const bizarerries = FindAllBizarreries(itinerary)
     let html =`<h2>Itinerary Preview<h2> `
    if (park){
@@ -165,11 +187,13 @@ export const ItineraryPreview = () => {
     <div class="parkDetails"></div>
     </div>`
    }
-    if (eatery ) {
-    html += `<div class = "previewItem"> ${eatery.businessName}
-    <button id="Details_eatery"> Details</button>
-    <div class="eateryDetails"></div>
-    </div>`
+    if (eateries) {
+        for (const eatery of eateries) {
+            html += `<div class = "previewItem"> ${eatery.businessName}
+            <button id="Details_eatery--${eatery.id}"> Details</button>
+            <div class="eateryDetails"></div>
+            </div>`
+        }
    }
    if (bizarerries) {
     for(const bizarerrie of bizarerries) {
@@ -180,7 +204,7 @@ export const ItineraryPreview = () => {
     }
     
    }
-      if (park && eatery && bizarerries) {
+      if (park && eateries && bizarerries) {
         html +=  `<button id = "SavePreview"> Save Itinerary</button>`
       }
        
