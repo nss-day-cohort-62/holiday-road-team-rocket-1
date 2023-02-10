@@ -10,7 +10,7 @@ export const Directions = (parkLat, parkLon, eateryLat, eateryLon, bizarerrieLat
 
 export const Instructions = (instructionsObject) => {
     const instructionsArray = instructionsObject.paths[0].instructions 
-    let html = '<ol>'
+    let html = '<h2> Directions For Selected Roadtrip</h2><ol>'
     instructionsArray.map((instruction) => {
         return html += `<li>${instruction.text}</li>`
     })

@@ -19,6 +19,8 @@ export const HolidayRoad = () => {
 
         ${itineraryForm()}
     <div class = "itineraryPreviewBox">
+   
+        <h1> Holiday Road</h1>
         <div class="itineraryPreview"></div>
 
     </div>

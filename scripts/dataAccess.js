@@ -56,17 +56,27 @@ export const FindBizarrerie = (id) => {
     return foundBizarrerie
 }
 
-export const FindAllBizarreries = (bizarrarieIdArray) => {
+
+export const FindAllBizarreries = (itinerary) => {
     const bizarreries = getBizarreries()
-    const foundBizarreries = []
+    let bizarrerieArray = bizarreries.filter((bizarrerie) => 
+         (itinerary.bizarrerieIds.includes(bizarrerie.id)))
+            
+
+return bizarrerieArray
+        }
+    
+
+        
+    
+   /* const foundBizarreries = []
     bizarreries.map(bizarrerie => {
         foundBizarreries.push(bizarrarieIdArray.filter(bizarrarieId => {
             bizarrerie.id === bizarrarieId
         }
-    ))
-    return foundBizarreries
-    })
-}
+    ))*/
+    
+    
 
 export const sendItinerary = (itinerary) => {
     const fetchOptions = {
