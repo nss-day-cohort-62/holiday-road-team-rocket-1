@@ -17,7 +17,9 @@ export const getItinerary = () => {
 }
 
 export const resetItinerary = () => {
-    applicationState.itinerary = {}
+    applicationState.itinerary = 
+    {bizarrerieIds: [],
+    eateryIds: []}
 }
 export const setParkId = (id) => {
     applicationState.itinerary.nationalParkId = id
