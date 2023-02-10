@@ -1,16 +1,16 @@
 {
   "savedItineraries": [
     {
+      "bizarrerieIds": [
+        16,
+        20
+      ],
+      "eateryIds": [
+        5,
+        8
+      ],
       "nationalParkId": "77E0D7F0-1942-494A-ACE2-9004D2BDC59E",
-      "eateryId": 4,
-      "bizarrerieId": 11,
       "id": 1
-    },
-    {
-      "nationalParkId": "1A47416F-DAA3-4137-9F30-14AF86B4E547",
-      "eateryId": 6,
-      "bizarrerieId": 10,
-      "id": 2
     }
   ]
 }

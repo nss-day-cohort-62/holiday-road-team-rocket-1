@@ -6,7 +6,8 @@ const API = "http://localhost:8088"
 
 export const applicationState = {
  itinerary: {
-    bizarrerieIds: []
+    bizarrerieIds: [],
+    eateryIds: []
  },
 savedItineraries: []
 }
@@ -22,7 +23,8 @@ export const setParkId = (id) => {
     applicationState.itinerary.nationalParkId = id
 }
 export const setEateryId = (id) => {
-    applicationState.itinerary.eateryId = id
+    applicationState.itinerary.eateryIds.push(id)
+    console.log(applicationState.itinerary.eateryIds)
 }
 export const setBizarrerieId = (id) => {
     applicationState.itinerary.bizarrerieIds.push(id)
@@ -46,6 +48,14 @@ export const FindEatery = (id) => {
     )
     return foundEatery
 }
+
+export const FindAllEateries = (itinerary) => {
+    const eateries = getEateries()
+    let eateryArray = eateries.filter((eatery) => 
+    (itinerary.eateryIds.includes(eatery.id)))
+    return eateryArray
+}
+
 export const FindBizarrerie = (id) => {
     const bizarreries = getBizarreries()
     const foundBizarrerie = bizarreries.find(
@@ -60,23 +70,9 @@ export const FindBizarrerie = (id) => {
 export const FindAllBizarreries = (itinerary) => {
     const bizarreries = getBizarreries()
     let bizarrerieArray = bizarreries.filter((bizarrerie) => 
-         (itinerary.bizarrerieIds.includes(bizarrerie.id)))
-            
-
-return bizarrerieArray
-        }
-    
-
-        
-    
-   /* const foundBizarreries = []
-    bizarreries.map(bizarrerie => {
-        foundBizarreries.push(bizarrarieIdArray.filter(bizarrarieId => {
-            bizarrerie.id === bizarrarieId
-        }
-    ))*/
-    
-    
+    (itinerary.bizarrerieIds.includes(bizarrerie.id)))
+    return bizarrerieArray
+}
 
 export const sendItinerary = (itinerary) => {
     const fetchOptions = {
