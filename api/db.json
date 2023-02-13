@@ -37,6 +37,23 @@
         10
       ],
       "id": 2
+    },
+    {
+      "nationalParkIds": [
+        null,
+        "77E0D7F0-1942-494A-ACE2-9004D2BDC59E",
+        null,
+        null,
+        "34CB30BA-8A5F-4563-AA34-6633708DD9DC",
+        null
+      ],
+      "bizarrerieIds": [
+        14
+      ],
+      "eateryIds": [
+        3
+      ],
+      "id": 3
     }
   ]
 }
