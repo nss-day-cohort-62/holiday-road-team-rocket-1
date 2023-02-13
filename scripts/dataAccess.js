@@ -6,6 +6,7 @@ const API = "http://localhost:8088"
 
 export const applicationState = {
  itinerary: {
+    nationalParkIds: [],
     bizarrerieIds: [],
     eateryIds: []
  },
@@ -18,11 +19,14 @@ export const getItinerary = () => {
 
 export const resetItinerary = () => {
     applicationState.itinerary = 
-    {bizarrerieIds: [],
-    eateryIds: []}
+    {
+        nationalParkIds: [],
+        bizarrerieIds: [],
+        eateryIds: []
+    }
 }
 export const setParkId = (id) => {
-    applicationState.itinerary.nationalParkId = id
+    applicationState.itinerary.nationalParkIds.push(id)
 }
 export const setEateryId = (id) => {
     applicationState.itinerary.eateryIds.push(id)
@@ -49,6 +53,13 @@ export const FindEatery = (id) => {
         }
     )
     return foundEatery
+}
+
+export const FindAllParks = (itinerary) => {
+    const parks = getParks()
+    let parkArray = parks.filter((park) => 
+    (itinerary.nationalParkIds.includes(park.id)))
+    return parkArray
 }
 
 export const FindAllEateries = (itinerary) => {
