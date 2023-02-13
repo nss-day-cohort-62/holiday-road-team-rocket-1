@@ -8,8 +8,8 @@ export const LocationHTTPS = (geoCode) => {
     return httpString
 }
 
-export const Directions = (parkLat, parkLon, httpString) => {
-    return fetch(`https://graphhopper.com/api/1/route?point=36.1627,-86.7816${httpString}&point=${parkLat},${parkLon}&profile=car&locale=en&instructions=true&key=7eec464a-0db4-49e0-bba6-6bc40c2b72b6`)
+export const Directions = (httpString) => {
+    return fetch(`https://graphhopper.com/api/1/route?point=36.1627,-86.7816${httpString}&profile=car&locale=en&instructions=true&key=7eec464a-0db4-49e0-bba6-6bc40c2b72b6`)
     .then(response => response.json())
     }
 
@@ -23,7 +23,7 @@ export const Instructions = (instructionsObject) => {
     return html
 }
 
-export const LocationsMap = (eateriesArray, bizarreriesArray) => {
+export const LocationsMap = (eateriesArray, bizarreriesArray, parksArray) => {
     let geoCodePromises = []
     let httpString = ''
 
@@ -33,6 +33,10 @@ export const LocationsMap = (eateriesArray, bizarreriesArray) => {
     eateriesArray.map((eatery) => {
        geoCodePromises.push(Geocoding(eatery.city))
     })
+    parksArray.map((park) => {
+        console.log(park)
+        geoCodePromises.push(Geocoding(park.addresses[0].city))
+     })
 
     return Promise.all(geoCodePromises).then(
         (geoCodes) => {

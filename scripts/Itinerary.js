@@ -165,13 +165,14 @@ document.addEventListener("click", clickEvent => {
             return itinerary.id === parseInt(userPrimaryKey)
         })
 
-        const park = FindPark(foundItinerary.nationalParkId)
+        const parks = FindAllParks(foundItinerary)
         const eateries = FindAllEateries(foundItinerary)
         const bizarerries = FindAllBizarreries(foundItinerary)
 
-        LocationsMap(eateries, bizarerries).then(
+        LocationsMap(eateries, bizarerries, parks).then(
             (httpString) => {
-                Directions(park.latitude, park.longitude, httpString).then(
+                console.log(httpString)
+                Directions(httpString).then(
                     (instructions) => {
                         renderDirections(Instructions(instructions))
                     }
